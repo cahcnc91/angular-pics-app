@@ -22,6 +22,9 @@ export class SignInComponent implements OnInit {
       userName: ['', Validators.required],
       password: ['', Validators.required],
     });
+  }
+
+  ngAfterViewInit() {
     this.platformDetectorService.isPlatformBrowser() && this.userNameInput.nativeElement.focus();
   }
 
