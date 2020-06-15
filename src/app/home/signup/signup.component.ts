@@ -6,6 +6,7 @@ import { NewUser } from './new-user';
 import { SignUpService } from './signup.service';
 import { Router } from '@angular/router';
 import { PlatformDetectorService } from 'src/app/core/platform-detector/platform-detector.services';
+import { userNamePassword } from './username-password.validator';
 
 @Component({
   templateUrl: './signup.component.html',
@@ -20,7 +21,7 @@ export class SignUpComponent implements OnInit {
     private userNotTakenValidatorService: UserNotTakenValidatorService,
     private signupservice: SignUpService,
     private router: Router,
-    private platformDetectorService: PlatformDetectorService
+    private platformDetectorService: PlatformDetectorService,
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +53,8 @@ export class SignUpComponent implements OnInit {
           Validators.maxLength(14),
         ],
       ],
+    }, {
+      validator: userNamePassword
     });
   }
 
@@ -60,12 +63,15 @@ export class SignUpComponent implements OnInit {
   }
 
   signup() {
-    const newUser = this.signupForm.getRawValue() as NewUser;
+    if(this.signupForm.valid && !this.signupForm.pending){
+      const newUser = this.signupForm.getRawValue() as NewUser;
     this.signupservice
       .signup(newUser)
       .subscribe(
         () => this.router.navigate(['']),
         err => console.log(err)
     );
+    }
+    
   }
 }
